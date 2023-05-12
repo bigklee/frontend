@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Millimetre";
+    src: url("/src/assets/Millimetre-Regular.otf") format("opentype");
+  }
+
+  @font-face {
+    font-family: "Millimetre";
+    font-weight: bold;
+    src: url("/src/assets/Millimetre-Bold.otf") format("opentype");
+  }
+}
+
+@layer components {
+  .btn {
+    @apply p-3 mb-2 w-full rounded-lg hover:bg-slate-800 aspect-square;
+  }
+  .btn-img {
+    @apply w-full h-full;
+  }
+}
