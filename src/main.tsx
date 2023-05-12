@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { RouterProvider, createHashRouter } from "react-router-dom";
+import { RouterProvider, createHashRouter, json } from "react-router-dom";
 import { Default } from "./components/Default/index.tsx";
 import { CollectionList } from "./components/CollectionList/index.tsx";
 import { Archive } from "./components/Archive/index.tsx";
@@ -17,7 +17,13 @@ const router = createHashRouter([
         path: "explore",
         element: <Archive />,
         loader: async () => {
-          return fetch("http://martini.buero.io:5000/api/v1/artworks");
+          const [data, filters] = await Promise.all([
+            (
+              await fetch("http://martini.buero.io:5000/api/v1/artworks")
+            ).json(),
+            (await fetch("http://martini.buero.io:5000/api/v1/filters")).json(),
+          ]);
+          return json({ data, filters });
         },
       },
       {
