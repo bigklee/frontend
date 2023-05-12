@@ -6,7 +6,7 @@ export const Archive = () => {
   const filter = useState<string[]>([]);
 
   useEffect(() => {
-    console.log(data);
+    console.log(data, filter);
   }, [data]);
   return <div>Archive</div>;
 };

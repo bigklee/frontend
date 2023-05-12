@@ -1,10 +1,9 @@
-import { Outlet, createHashRouter } from "react-router-dom";
-import "./App.css";
-import Flow from "./components/Example";
+import { Outlet } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
 import { UserRole } from "./types";
 import { useEffect, useState } from "react";
+import "./App.css";
 
 const App = () => {
   const [userRole, setUserRole] = useState<UserRole>("visitor");
