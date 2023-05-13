@@ -1,13 +1,13 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { ArtCollection } from "../../types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import VisNetwork from "../VisNetwork";
-import { ArtEdge, ArtNode, artworkToNode, createFilter } from "../../utils";
+import { ArtNode, artworkToNode } from "../../utils";
 
 export const Collection = () => {
   const data = useLoaderData() as ArtCollection;
 
-  const [nodes, setNodes] = useState<ArtNode[]>(data.works.map(artworkToNode));
+  const [nodes, _] = useState<ArtNode[]>(data.works.map(artworkToNode));
   const [graphIsActive, setGraphActive] = useState(false);
 
   console.log(nodes);
