@@ -1,14 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { classNames, pathToTitle } from "../../utils";
-import { UserRole } from "../../types";
 
-const roles: UserRole[] = ["visitor", "curator", "admin"];
-
-export const Header = ({
-  setUserRole,
-}: {
-  setUserRole: (r: UserRole) => void;
-}) => {
+export const Header = () => {
   const location = useLocation();
 
   return (
@@ -29,16 +22,6 @@ export const Header = ({
           </div>
         </>
       ) : null}
-      <select
-        className="text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 bg-slate-700 border-slate-600 placeholder-gray-400 text-slate-50 ml-auto w-fit"
-        onChange={(e) => setUserRole(e.target.value as UserRole)}
-      >
-        {roles.map((r, i) => (
-          <option key={i} value={r}>
-            {r}
-          </option>
-        ))}
-      </select>
     </div>
   );
 };

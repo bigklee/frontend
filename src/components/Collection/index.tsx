@@ -3,6 +3,8 @@ import { ArtCollection } from "../../types";
 import { useState } from "react";
 import VisNetwork from "../VisNetwork";
 import { ArtNode, artworkToNode } from "../../utils";
+import Share from "../../assets/share-fill.svg";
+import Download from "../../assets/download.svg";
 
 export const Collection = () => {
   const data = useLoaderData() as ArtCollection;
@@ -79,6 +81,14 @@ export const Collection = () => {
               <div className="font-bold">{"Test Test"}</div>
             </li>
           </ul>
+        </div>
+        <div className="flex content-end justify-end gap-6 h-14">
+          <button className="btn w-12 hover:bg-slate-500">
+            <img src={Download} className="btn-img"></img>
+          </button>
+          <button className="btn w-12 hover:bg-slate-500">
+            <img src={Share} className="btn-img"></img>
+          </button>
         </div>
       </div>
       <VisNetwork
