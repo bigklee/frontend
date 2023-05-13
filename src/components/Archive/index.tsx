@@ -1,34 +1,100 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { Artwork } from "../../types";
-import { artworkToNode, createEdges } from "../../utils";
+import {
+  ArtEdge,
+  ArtNode,
+  artworkToNode,
+  createEdges,
+  createFilter,
+} from "../../utils";
 import VisNetwork from "../VisNetwork";
+import { useEffect, useState } from "react";
+import CollectionAdd from "../../assets/collection_add.svg";
 
 export const Archive = () => {
   const { data, filters } = useLoaderData() as {
     data: Artwork[];
     filters: string[];
   };
+  const [filterYear, setFilterYear] = useState(false);
+  const [groupKeywords, setGroupKeywords] = useState(false);
 
-  const nodes = data.map(artworkToNode);
+  const [groupNodes, setGroupNodes] = useState<ArtNode[] | null>(null);
+  const [filterNodes, setFilterNodes] = useState<ArtNode[] | null>(null);
 
-  const edges1 = nodes
-    .filter((n) => n.group === "Lukas")
-    .map((n) => createEdges(n, { id: 1, label: "Lukas" }));
+  const [groupEdges, setGroupEdges] = useState<ArtEdge[] | null>(null);
+  const [filterEdges, setFilterEdges] = useState<ArtEdge[] | null>(null);
 
-  const edges2 = nodes
-    .filter((n) => n.group === "Loosli")
-    .map((n) => createEdges(n, { id: 2, label: "Loosli" }));
-
-  const edges3 = [
-    { from: 0, to: 1 },
-    { from: 0, to: 2 },
+  const years = [
+    1926, 1929, 1937, 1933, 1937, 1913, 1935, 1909, 1919, 1921, 1935,
   ];
 
-  const edges = [...edges1, ...edges2, ...edges3];
+  useEffect(() => {
+    filterYear
+      ? setFilterNodes([
+          {
+            id: 0,
+            label: "Year: 1931",
+            shape: "box",
+            color: { background: "#334155", border: "#f59e0b" },
+          },
+        ])
+      : setFilterNodes(null);
+  }, [filterYear]);
 
-  nodes.push({ id: 0, label: "Paul Klober", shape: "box" });
-  nodes.push({ id: 2, label: "Loosli", shape: "box" });
-  nodes.push({ id: 1, label: "Lukas", shape: "box" });
+  useEffect(() => {
+    if (filterNodes !== null && groupNodes !== null) {
+      setFilterEdges(
+        groupNodes.map((gN) => ({ from: filterNodes[0].id, to: gN.id }))
+      );
+      setNodes(
+        groupNodes
+          .flatMap((gN) => data.filter((dP) => dP.keywords?.includes(gN.label)))
+          .filter((a) => years.includes(a.year ?? 0))
+          .map(artworkToNode)
+      );
+    }
+    if (filterNodes !== null && groupNodes === null) {
+      setFilterEdges(nodes.map((n) => ({ from: filterNodes[0].id, to: n.id })));
+      setNodes(
+        data.filter((a) => years.includes(a.year ?? 0)).map(artworkToNode)
+      );
+    }
+    if (filterNodes === null && groupNodes === null) {
+      setNodes(data.map(artworkToNode));
+    }
+  }, [groupNodes, filterNodes]);
+
+  useEffect(() => {
+    groupKeywords
+      ? setGroupNodes([
+          { id: 1, label: "Kopf", shape: "box" },
+          { id: 2, label: "Stadt", shape: "box" },
+          { id: 3, label: "Staat", shape: "box" },
+          { id: 4, label: "Winter", shape: "box" },
+        ])
+      : setGroupNodes(null);
+  }, [groupKeywords]);
+
+  useEffect(() => {
+    if (groupNodes !== null) {
+      setNodes(
+        groupNodes
+          .flatMap((gN) => data.filter((dP) => dP.keywords?.includes(gN.label)))
+          .map(artworkToNode)
+      );
+      setGroupEdges(
+        groupNodes.flatMap((gN) =>
+          createFilter(
+            data.filter((dP) => dP.keywords?.includes(gN.label)),
+            gN
+          )
+        )
+      );
+    }
+  }, [groupNodes]);
+
+  const [nodes, setNodes] = useState<ArtNode[]>(data.map(artworkToNode));
 
   return (
     <div className="h-full w-full flex flex-row rounded-lg gap-x-12">
@@ -39,12 +105,41 @@ export const Archive = () => {
           className="bg-slate-600 p-2 text-slate-50 rounded-lg"
         ></input>
         <div className="flex flex-row gap-6">
-          <button className="bg-slate-600 hover:bg-slate-500 text-slate-50 rounded-lg p-2">
-            Add Filter
-          </button>
-          <button className="bg-slate-600 hover:bg-slate-500 text-slate-50 rounded-lg p-2">
-            Add Grouping
-          </button>
+          {!filterYear ? (
+            <button
+              onClick={() => setFilterYear(true)}
+              className="bg-slate-600 hover:bg-slate-500 text-slate-50 rounded-lg p-1"
+            >
+              Add Filter
+            </button>
+          ) : (
+            <button
+              onClick={() => setFilterYear(false)}
+              className="bg-slate-200 text-slate-800 rounded-lg p-1"
+            >
+              Year: 1931
+            </button>
+          )}
+          {!groupKeywords ? (
+            <button
+              onClick={() => setGroupKeywords(true)}
+              className="bg-slate-600 hover:bg-slate-500 text-slate-50 rounded-lg p-1"
+            >
+              Add Grouping
+            </button>
+          ) : (
+            <button
+              onClick={() => setGroupKeywords(false)}
+              className="bg-slate-200 text-slate-800 rounded-lg p-1"
+            >
+              Group: Keywords
+            </button>
+          )}
+          {filterYear || groupEdges ? (
+            <button className=" bg-slate-600 hover:bg-slate-500 text-slate-50 rounded-lg p-1">
+              Create Collection
+            </button>
+          ) : null}
         </div>
         <div
           role="list"
@@ -63,14 +158,22 @@ export const Archive = () => {
           </ul>
         </div>
       </div>
-      <VisNetwork nodes={nodes} edges={edges} />
+      <VisNetwork
+        nodes={[...nodes, ...(filterNodes ?? []), ...(groupNodes ?? [])]}
+        edges={[...(filterEdges ?? []), ...(groupEdges ?? [])]}
+      />
     </div>
   );
 };
 
 const ArtworkEntry = (props: { title: string; work_nr: string }) => {
+  const navigate = useNavigate();
   return (
-    <li className="flex justify-between text-slate-50 p-2 hover:bg-slate-500">
+    <li
+      role="button"
+      onClick={() => navigate("/artwork")}
+      className="flex justify-between text-slate-50 p-2 hover:bg-slate-500"
+    >
       <div className="font-bold">{props.title}</div>
       <div>{props.work_nr}</div>
     </li>

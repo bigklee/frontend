@@ -7,6 +7,7 @@ import { Default } from "./components/Default/index.tsx";
 import { CollectionList } from "./components/CollectionList/index.tsx";
 import { Archive } from "./components/Archive/index.tsx";
 import VisNetwork from "./components/VisNetwork/index.tsx";
+import { Artwork } from "./components/Artwork/index.tsx";
 
 const router = createHashRouter([
   {
@@ -35,6 +36,7 @@ const router = createHashRouter([
         path: "create",
         element: <div>Create collection</div>,
       },
+      { path: "artwork", element: <Artwork /> },
     ],
   },
 ]);

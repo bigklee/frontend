@@ -15,7 +15,6 @@ const VisNetwork = (props: { nodes: ArtNode[]; edges: ArtEdge[] }) => {
           autoResize: true,
           layout: { improvedLayout: false },
           nodes: {
-            shape: "image",
             brokenImage: BrokenImage,
             font: {
               color: "#f1f5f9",
