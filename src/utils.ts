@@ -1,4 +1,3 @@
-import { Node } from "reactflow";
 import { Artwork } from "./types";
 
 export const classNames = (...args: string[]) =>

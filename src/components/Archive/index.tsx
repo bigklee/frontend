@@ -1,18 +1,11 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { Artwork } from "../../types";
-import {
-  ArtEdge,
-  ArtNode,
-  artworkToNode,
-  createEdges,
-  createFilter,
-} from "../../utils";
+import { ArtEdge, ArtNode, artworkToNode, createFilter } from "../../utils";
 import VisNetwork from "../VisNetwork";
 import { useEffect, useState } from "react";
-import CollectionAdd from "../../assets/collection_add.svg";
 
 export const Archive = () => {
-  const { data, filters } = useLoaderData() as {
+  const { data } = useLoaderData() as {
     data: Artwork[];
     filters: string[];
   };
