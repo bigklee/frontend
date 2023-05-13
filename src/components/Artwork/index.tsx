@@ -24,6 +24,11 @@ export const Artwork = () => {
         <div className="font-millimetre font-bold text-amber-500 text-3xl">
           {artwork.title_en}
         </div>
+        <div className="text-slate-50">
+          Ein ägyptischer Sphinx ist die Statue eines Löwen zumeist mit einem
+          Menschenkopf. Daneben sind auch Widder-, Falken- und Sperberköpfe
+          gebräuchlich. Am bekanntesten ist die Große Sphinx von Gizeh.{" "}
+        </div>
         <div className="flex gap-6">
           {[
             { title: "Work Nr.", val: artwork.work_no },

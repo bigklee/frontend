@@ -3,7 +3,11 @@ import { Network } from "vis-network";
 import { ArtEdge, ArtNode } from "../../utils";
 import BrokenImage from "../../assets/no_imagge.png";
 
-const VisNetwork = (props: { nodes: ArtNode[]; edges: ArtEdge[] }) => {
+const VisNetwork = (props: {
+  nodes: ArtNode[];
+  edges: ArtEdge[];
+  isGraph: boolean;
+}) => {
   const visJsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const network =
@@ -13,7 +17,9 @@ const VisNetwork = (props: { nodes: ArtNode[]; edges: ArtEdge[] }) => {
         { nodes: props.nodes, edges: props.edges },
         {
           autoResize: true,
-          layout: { improvedLayout: false },
+          layout: props.isGraph
+            ? { improvedLayout: false, hierarchical: { nodeSpacing: 300 } }
+            : { improvedLayout: false },
           nodes: {
             brokenImage: BrokenImage,
             font: {

@@ -43,7 +43,7 @@ const CollectionEntry = (props: {
     <div
       role="button"
       className="flex justify-between p-4 text-xl hover:bg-slate-600"
-      onClick={() => navigate("collection/:" + props.path)}
+      onClick={() => navigate("/essentials")}
     >
       <div className="flex flex-col">
         <div>{props.title}</div>

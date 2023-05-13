@@ -16,3 +16,10 @@ export type Artwork = {
   link_description: string | null;
   institution: string | null;
 };
+
+export type ArtCollection = {
+  collection_id: number;
+  author: string;
+  name: string;
+  works: Artwork[];
+};

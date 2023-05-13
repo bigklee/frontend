@@ -7,6 +7,7 @@ import { Default } from "./components/Default/index.tsx";
 import { CollectionList } from "./components/CollectionList/index.tsx";
 import { Archive } from "./components/Archive/index.tsx";
 import { Artwork } from "./components/Artwork/index.tsx";
+import { Collection } from "./components/Collection/index.tsx";
 
 const router = createHashRouter([
   {
@@ -30,6 +31,13 @@ const router = createHashRouter([
       {
         path: "collections",
         element: <CollectionList />,
+      },
+      {
+        path: "essentials",
+        element: <Collection />,
+        loader: async () => {
+          return fetch("http://martini.buero.io:5000/api/v1/collections/2");
+        },
       },
       {
         path: "create",

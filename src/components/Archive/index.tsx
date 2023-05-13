@@ -154,6 +154,7 @@ export const Archive = () => {
       <VisNetwork
         nodes={[...nodes, ...(filterNodes ?? []), ...(groupNodes ?? [])]}
         edges={[...(filterEdges ?? []), ...(groupEdges ?? [])]}
+        isGraph={false}
       />
     </div>
   );
